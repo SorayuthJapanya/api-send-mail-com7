@@ -1,0 +1,2 @@
+# COM7 Send Email
+This is a simple Node.js application that sends an email to a given email address with a predefined email template. The email template is determined by the `type` parameter, which can be either "ONLINE" or "ONSITE". The application is configured to use Gmail SMTP server for sending emails.
