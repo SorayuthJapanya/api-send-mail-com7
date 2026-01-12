@@ -23,11 +23,12 @@ router.post("/send-mail", async (req, res) => {
 
     console.log("Body:", req.body);
 
-    await sendMail(req.body);
+    const result = await sendMail(req.body);
 
     res.json({
       success: true,
-      message: "Welcome email sent",
+      message: "Email sent successfully",
+      data: result
     });
   } catch (error) {
     console.error(error);

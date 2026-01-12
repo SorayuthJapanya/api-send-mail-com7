@@ -7,26 +7,19 @@ import { onsiteEmailTemplate } from "../templates/onsiteEmailTemplate.js";
 dotenv.config();
 
 const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
+  host: "smtp-relay.brevo.com",
   port: 587,
   secure: false,
-  requireTLS: true,
   auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
+    user: process.env.BREVO_SMTP_USER,
+    pass: process.env.BREVO_SMTP_KEY,
   },
 });
 
-transporter.verify(function (error, success) {
-  if (error) {
-    console.log("❌ SMTP Connection Error:", error);
-  } else {
-    console.log("✅ SMTP Server is ready to take our messages");
-  }
+transporter.verify((err) => {
+  if (err) console.error("SMTP error:", err);
+  else console.log("Brevo SMTP ready");
 });
-
-console.log(process.env.EMAIL_USER);
-console.log(process.env.EMAIL_PASS);
 
 export async function sendMail({
   to,
@@ -38,16 +31,26 @@ export async function sendMail({
   type,
 }) {
   let html = "";
+
   if (type === "ONLINE") {
     html = onlineEmailTemplate({ fullname, date, timePeriod });
   } else if (type === "ONSITE") {
     html = onsiteEmailTemplate({ fullname, date, timePeriod, location });
+  } else {
+    throw new Error("Invalid email type");
   }
 
-  return transporter.sendMail({
-    from: process.env.EMAIL_USER, // Sender address
+  const info = await transporter.sendMail({
+    from: `"COM7 Interview" <sorayuthjaapanya@gmail.com>`,
     to,
-    subject: `[COM7] ${eventName}: แจ้งเตือนการลงละเบียนผู้สมัครสัมภาษณ์`,
+    subject: `[COM7] ${eventName}: แจ้งเตือนการลงทะเบียนผู้สมัครสัมภาษณ์`,
     html,
   });
+
+  return {
+    success: true,
+    messageId: info.messageId,
+    accepted: info.accepted,
+    rejected: info.rejected,
+  };
 }
