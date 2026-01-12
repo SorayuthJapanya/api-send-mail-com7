@@ -1,7 +1,7 @@
 import nodemailer from "nodemailer";
 import dotenv from "dotenv";
 
-import { onlineEmailTemplate } from "../templates/onliteEmailTemplate.js";
+import { onlineEmailTemplate } from "../templates/onlineEmailTemplate.js"; 
 import { onsiteEmailTemplate } from "../templates/onsiteEmailTemplate.js";
 
 dotenv.config();
