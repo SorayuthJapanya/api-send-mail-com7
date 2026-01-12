@@ -19,6 +19,9 @@ const transporter = nodemailer.createTransport({
   },
 });
 
+console.log(process.env.EMAIL_USER)
+console.log(process.env.EMAIL_PASS)
+
 export async function sendMail({
   to,
   eventName,
