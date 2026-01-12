@@ -1,7 +1,7 @@
 import nodemailer from "nodemailer";
 import dotenv from "dotenv";
 
-import { onlineEmailTemplate } from "../templates/onlineEmailTemplate.js"; 
+import { onlineEmailTemplate } from "../templates/onlineEmailTemplate.js";
 import { onsiteEmailTemplate } from "../templates/onsiteEmailTemplate.js";
 
 dotenv.config();
@@ -11,16 +11,22 @@ const transporter = nodemailer.createTransport({
   port: 587,
   secure: false,
   requireTLS: true,
-  logger: true,
-  debug: true,
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS,
   },
 });
 
-console.log(process.env.EMAIL_USER)
-console.log(process.env.EMAIL_PASS)
+transporter.verify(function (error, success) {
+  if (error) {
+    console.log("❌ SMTP Connection Error:", error);
+  } else {
+    console.log("✅ SMTP Server is ready to take our messages");
+  }
+});
+
+console.log(process.env.EMAIL_USER);
+console.log(process.env.EMAIL_PASS);
 
 export async function sendMail({
   to,
@@ -33,21 +39,13 @@ export async function sendMail({
 }) {
   let html = "";
   if (type === "ONLINE") {
-    html = onlineEmailTemplate({
-      fullname,
-      date,
-      timePeriod,
-    });
+    html = onlineEmailTemplate({ fullname, date, timePeriod });
   } else if (type === "ONSITE") {
-    html = onsiteEmailTemplate({
-      fullname,
-      date,
-      timePeriod,
-      location,
-    });
+    html = onsiteEmailTemplate({ fullname, date, timePeriod, location });
   }
+
   return transporter.sendMail({
-    from: `${process.env.EMAIL_USER}`,
+    from: process.env.EMAIL_USER, // Sender address
     to,
     subject: `[COM7] ${eventName}: แจ้งเตือนการลงละเบียนผู้สมัครสัมภาษณ์`,
     html,
