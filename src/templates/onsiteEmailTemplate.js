@@ -1,4 +1,10 @@
-export function onsiteEmailTemplate({ fullname, date, timePeriod, location }) {
+export function onsiteEmailTemplate({
+  fullname,
+  date,
+  timePeriod,
+  location,
+  fullEventName,
+}) {
   return `
     <!DOCTYPE html>
     <html>
@@ -35,6 +41,9 @@ export function onsiteEmailTemplate({ fullname, date, timePeriod, location }) {
             border: 1px solid #e0e0e0;
             "
         >
+            <p style="margin: 5px 0">
+            <strong>⭐ ชื่องาน:</strong> ${fullEventName}
+            </p>
             <p style="margin: 5px 0">
             <strong>🗓 วันที่สัมภาษณ์:</strong> ${date}
             </p>

@@ -1,4 +1,4 @@
-export function onlineEmailTemplate({ fullname, date, timePeriod }) {
+export function onlineEmailTemplate({ fullname, date, timePeriod, fullEventName }) {
   return `
     <!DOCTYPE html>
     <html>
@@ -36,6 +36,9 @@ export function onlineEmailTemplate({ fullname, date, timePeriod }) {
             "
         >
             <p style="margin: 5px 0">
+            <strong>⭐ ชื่องาน:</strong> ${fullEventName}
+            </p>
+            <p style="margin: 5px 0">
             <strong>🗓 วันที่สัมภาษณ์:</strong> ${date}
             </p>
             <p style="margin: 5px 0">
@@ -54,14 +57,6 @@ export function onlineEmailTemplate({ fullname, date, timePeriod }) {
         </div>
 
         <br />
-
-        <h3 style="color: #000000; margin-bottom: 10px; font-size: 18px">
-            📄 เอกสารที่ต้องนำมาในวันสัมภาษณ์
-        </h3>
-        <ul style="margin-top: 0">
-            <li>ประวัติย่อ (Resume / CV)</li>
-            <li>เอกสารอื่นๆ ที่เกี่ยวข้อง (ถ้ามี)</li>
-        </ul>
 
         <h3 style="color: #000000; margin-bottom: 10px; font-size: 18px">
             👔 การแต่งกาย

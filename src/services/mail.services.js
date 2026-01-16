@@ -29,6 +29,7 @@ export async function sendMail(payload) {
 async function sendMailByType({
   to,
   eventName,
+  buName,
   fullname,
   date,
   timePeriod,
@@ -37,16 +38,17 @@ async function sendMailByType({
 }) {
   let html;
   let subject;
+  const fullEventName = `${eventName}-${buName}` 
 
   switch (type) {
     case "ONLINE":
-      html = onlineEmailTemplate({ fullname, date, timePeriod });
-      subject = `[COM7] ${eventName} : ยืนยันการลงทะเบียนและสัมภาษณ์งาน`;
+      html = onlineEmailTemplate({ fullname, date, timePeriod, fullEventName });
+      subject = `[COM7] ${eventName}-${buName} : ยืนยันการลงทะเบียนและสัมภาษณ์งาน`;
       break;
 
     case "ONSITE":
-      html = onsiteEmailTemplate({ fullname, date, timePeriod, location });
-      subject = `[COM7] ${eventName} : ยืนยันการลงทะเบียนและสัมภาษณ์งาน`;
+      html = onsiteEmailTemplate({ fullname, date, timePeriod, location, fullEventName });
+      subject = `[COM7] ${eventName}-${buName} : ยืนยันการลงทะเบียนและสัมภาษณ์งาน`;
       break;
 
     default:
