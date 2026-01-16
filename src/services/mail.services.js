@@ -1,27 +1,32 @@
-import nodemailer from "nodemailer";
+import sgMail from "@sendgrid/mail";
 import dotenv from "dotenv";
 
 import { onlineEmailTemplate } from "../templates/onlineEmailTemplate.js";
 import { onsiteEmailTemplate } from "../templates/onsiteEmailTemplate.js";
+import { defaultEmailTemplate } from "../templates/defaultEmailTemplate.js";
 
 dotenv.config();
 
-const transporter = nodemailer.createTransport({
-  host: "smtp-relay.brevo.com",
-  port: 587,
-  secure: false,
-  auth: {
-    user: process.env.BREVO_SMTP_USER,
-    pass: process.env.BREVO_SMTP_KEY,
-  },
-});
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
-transporter.verify((err) => {
-  if (err) console.error("SMTP error:", err);
-  else console.log("Brevo SMTP ready");
-});
+/**
+ * Main entry
+ */
+export async function sendMail(payload) {
+  const { to, type } = payload;
 
-export async function sendMail({
+  if (!type) {
+    return sendDefaultMail({ to });
+  }
+
+  // 👉 ส่งตาม type
+  return sendMailByType(payload);
+}
+
+/**
+ * Service: ส่งตามประเภท (ONLINE / ONSITE)
+ */
+async function sendMailByType({
   to,
   eventName,
   fullname,
@@ -30,27 +35,65 @@ export async function sendMail({
   location,
   type,
 }) {
-  let html = "";
+  let html;
+  let subject;
 
-  if (type === "ONLINE") {
-    html = onlineEmailTemplate({ fullname, date, timePeriod });
-  } else if (type === "ONSITE") {
-    html = onsiteEmailTemplate({ fullname, date, timePeriod, location });
-  } else {
-    throw new Error("Invalid email type");
+  switch (type) {
+    case "ONLINE":
+      html = onlineEmailTemplate({ fullname, date, timePeriod });
+      subject = `[COM7] ${eventName} : แจ้งสัมภาษณ์ (Online)`;
+      break;
+
+    case "ONSITE":
+      html = onsiteEmailTemplate({ fullname, date, timePeriod, location });
+      subject = `[COM7] ${eventName} : แจ้งสัมภาษณ์ (Onsite)`;
+      break;
+
+    default:
+      throw new Error("Invalid email type");
   }
 
-  const info = await transporter.sendMail({
-    from: `"COM7 Interview" <sorayuthjaapanya@gmail.com>`,
+  const msg = {
     to,
-    subject: `[COM7] ${eventName}: แจ้งเตือนการลงทะเบียนผู้สมัครสัมภาษณ์`,
+    from: {
+      email: process.env.MAIL_FROM,
+      name: "COM7 Interview",
+    },
+    subject,
     html,
-  });
+  };
 
+  const [response] = await sgMail.send(msg);
+
+  return formatSendgridResponse(response);
+}
+
+/**
+ * Service: Default mail (มีแค่ to)
+ */
+async function sendDefaultMail({ to, fullname }) {
+  const msg = {
+    to,
+    from: {
+      email: process.env.MAIL_FROM,
+      name: "COM7 Interview",
+    },
+    subject: "[COM7] Notification",
+    html: defaultEmailTemplate({ fullname }),
+  };
+
+  const [response] = await sgMail.send(msg);
+
+  return formatSendgridResponse(response);
+}
+
+/**
+ * Normalize SendGrid response
+ */
+function formatSendgridResponse(response) {
   return {
     success: true,
-    messageId: info.messageId,
-    accepted: info.accepted,
-    rejected: info.rejected,
+    statusCode: response.statusCode,
+    headers: response.headers,
   };
 }

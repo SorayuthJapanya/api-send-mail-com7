@@ -5,36 +5,35 @@ const router = express.Router();
 
 router.post("/send-mail", async (req, res) => {
   try {
-    const { to, eventName, fullname, date, timePeriod, type, location } = req.body;
+    const { to, type, location } = req.body;
 
-    if (!to || !eventName || !fullname || !date || !timePeriod || !type) {
+    if (!to) {
       return res.status(400).json({
         success: false,
-        message: "Missing required fields",
+        message: "Missing 'to' field",
       });
     }
 
     if (type === "ONSITE" && !location) {
       return res.status(400).json({
         success: false,
-        message: "Missing required fields",
+        message: "Missing location for ONSITE interview",
       });
     }
-
-    console.log("Body:", req.body);
 
     const result = await sendMail(req.body);
 
     res.json({
       success: true,
       message: "Email sent successfully",
-      data: result
+      data: result,
     });
   } catch (error) {
-    console.error(error);
+    console.error("Send mail error:", error);
+
     res.status(500).json({
       success: false,
-      message: "Failed to send email",
+      message: error.message || "Failed to send email",
     });
   }
 });
