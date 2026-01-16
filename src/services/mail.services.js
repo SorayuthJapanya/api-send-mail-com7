@@ -41,12 +41,12 @@ async function sendMailByType({
   switch (type) {
     case "ONLINE":
       html = onlineEmailTemplate({ fullname, date, timePeriod });
-      subject = `[COM7] ${eventName} : แจ้งสัมภาษณ์ (Online)`;
+      subject = `[COM7] ${eventName} : ยืนยันการลงทะเบียนและสัมภาษณ์งาน`;
       break;
 
     case "ONSITE":
       html = onsiteEmailTemplate({ fullname, date, timePeriod, location });
-      subject = `[COM7] ${eventName} : แจ้งสัมภาษณ์ (Onsite)`;
+      subject = `[COM7] ${eventName} : ยืนยันการลงทะเบียนและสัมภาษณ์งาน`;
       break;
 
     default:
