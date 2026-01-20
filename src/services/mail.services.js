@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 
 import { onlineEmailTemplate } from "../templates/onlineEmailTemplate.js";
 import { onsiteEmailTemplate } from "../templates/onsiteEmailTemplate.js";
+import { text } from "express";
 
 dotenv.config();
 
@@ -12,14 +13,17 @@ sgMail.setApiKey(process.env.SENDGRID_API_KEY);
  * Main entry
  */
 export async function sendMail(payload) {
-  const { to, type } = payload;
+  const { type } = payload;
 
   if (!type) {
     return sendDefaultMail(payload);
   }
 
-  // 👉 ส่งตาม type
-  return sendMailByType(payload);
+  if (type === "CALL_LINK") {
+    return sendCallLinkMail(payload);
+  } else {
+    return sendMailByType(payload);
+  }
 }
 
 /**
@@ -99,6 +103,29 @@ async function sendDefaultMail({ to, fullname }) {
 ขอแสดงความนับถือ
 บริษัท คอมเซเว่น จำกัด (มหาชน)
     `.trim(),
+  };
+
+  const [response] = await sgMail.send(msg);
+  return formatSendgridResponse(response);
+}
+
+async function sendCallLinkMail({ to, fullname }) {
+  const msg = {
+    to,
+    from: {
+      email: process.env.MAIL_FROM,
+      name: "COM7 Interview",
+    },
+    subject: "[COM7] Notification: ยืนการการแนบลิงก์สัมภาษณ์",
+    text: `
+เรียน คุณ${fullname},
+
+          บริษัท คอมเซเว่น จำกัด (มหาชน) สามารถตรวจสอบลิงก์สัมภาษณ์ได้ที่นนี่
+
+
+ขอแสดงความนับถือ
+บริษัท คอมเซเว่น จำกัด (มหาชน)
+    `,
   };
 
   const [response] = await sgMail.send(msg);
