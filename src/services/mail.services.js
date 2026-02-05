@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import { onlineEmailTemplate } from "../templates/onlineEmailTemplate.js";
 import { onsiteEmailTemplate } from "../templates/onsiteEmailTemplate.js";
 import { text } from "express";
+import { confirmInterviewLinkTemplate } from "../templates/confirmInterviewLinkTemplate.js";
 
 dotenv.config();
 
@@ -109,23 +110,17 @@ async function sendDefaultMail({ to, fullname }) {
   return formatSendgridResponse(response);
 }
 
-async function sendCallLinkMail({ to, fullname }) {
+async function sendCallLinkMail({ to, date, eventName }) {
+  const htmlContent = confirmInterviewLinkTemplate({ date, eventName });
+
   const msg = {
     to,
     from: {
       email: process.env.MAIL_FROM,
       name: "COM7 Interview",
     },
-    subject: "[COM7] Notification: ยืนการการแนบลิงก์สัมภาษณ์",
-    text: `
-เรียน คุณ${fullname},
-
-          บริษัท คอมเซเว่น จำกัด (มหาชน) สามารถตรวจสอบลิงก์สัมภาษณ์ได้ที่นนี่
-
-
-ขอแสดงความนับถือ
-บริษัท คอมเซเว่น จำกัด (มหาชน)
-    `,
+    subject: `[COM7] ยืนยันสัมภาษณ์งาน ${eventName}`,
+    html: htmlContent,
   };
 
   const [response] = await sgMail.send(msg);
