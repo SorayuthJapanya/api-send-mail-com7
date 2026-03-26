@@ -1,5 +1,6 @@
 export function confirmInterviewLinkTemplate({ eventName, date }) {
-    const systemLink = "https://script.google.com/macros/s/AKfycbxgJs3sRLvQH9ArJzhwimyu1fwkYSEDBHw_CxAfiZHA3jDdOqTHSyFZP09OMcPyMqZj2g/exec";
+  const systemLink =
+    "https://script.google.com/macros/s/AKfycbyHSFor6M05vchLOCdRT--hECY6W4ycWB1cfMSnEVy439YhWCTLnEAz9Fho8NYPZnZyYQ/exec";
   return `
     <!doctype html>
 <html>
