@@ -8,6 +8,9 @@ import { confirmInterviewLinkTemplate } from "../templates/confirmInterviewLinkT
 
 dotenv.config();
 
+if (!process.env.SENDGRID_API_KEY) {
+  throw new Error("SENDGRID_API_KEY environment variable is not set");
+}
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 /**

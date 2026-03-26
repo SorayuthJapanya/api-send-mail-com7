@@ -1,6 +1,6 @@
 import sgMail from "@sendgrid/mail";
 import dotenv from "dotenv";
-import { openHouseSendMailTemplate } from "../templates/OpenHouseSendMailTemplate.js";
+import { openHouseSendMailTemplate } from "../templates/openHouseSendMailTemplate.js";
 
 dotenv.config();
 
