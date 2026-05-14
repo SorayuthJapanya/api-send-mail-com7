@@ -113,8 +113,8 @@ async function sendDefaultMail({ to, fullname }) {
   return formatSendgridResponse(response);
 }
 
-async function sendCallLinkMail({ to, date, eventName }) {
-  const htmlContent = confirmInterviewLinkTemplate({ date, eventName });
+async function sendCallLinkMail({ to, date, eventName, interviewLink }) {
+  const htmlContent = confirmInterviewLinkTemplate({ date, eventName, interviewLink });
 
   const msg = {
     to,

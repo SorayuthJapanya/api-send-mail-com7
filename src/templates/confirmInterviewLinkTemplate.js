@@ -1,6 +1,5 @@
-export function confirmInterviewLinkTemplate({ eventName, date }) {
-  const systemLink =
-    "https://script.google.com/macros/s/AKfycbyHSFor6M05vchLOCdRT--hECY6W4ycWB1cfMSnEVy439YhWCTLnEAz9Fho8NYPZnZyYQ/exec";
+export function confirmInterviewLinkTemplate({ eventName, date, interviewLink }) {
+  const systemLink = "https://script.google.com/macros/s/AKfycbzyQ-oqBsmM7INKfLWgcHIprks4POySHqDUhkNgR-rXXs8oE49ipl5eYY6kI7i85ZEL/exec";
   return `
     <!doctype html>
 <html>
@@ -87,17 +86,7 @@ export function confirmInterviewLinkTemplate({ eventName, date }) {
         </div>
 
         <p><strong>💻 ช่องทางการสัมภาษณ์ Online Interview</strong></p>
-        <p><a href="${systemLink}" class="btn-link">${systemLink}</a></p>
-        <p>รายละเอียดดังนี้</p>
-        <ul class="steps" style="list-style-type: none">
-            <li>1️⃣ ล็อกอินเข้าสู่ระบบให้เรียบร้อย</li>
-            <li>
-              2️⃣ เข้าเมนู <strong>ผลการสัมภาษณ์</strong>
-            </li>
-            <li>
-              3️⃣ ลิงก์สัมภาษณ์จะอยู่ในโปรไฟล์ของตำแหน่งงานที่ท่านสมัครไว้
-            </li>
-        </ul>
+        <p><a href="${interviewLink}" class="btn-link">${interviewLink}</a></p>
 
         <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0" />
 
