@@ -61,12 +61,6 @@ export function confirmInterviewLinkTemplate({ eventName, date, interviewLink })
   </head>
   <body>
     <div class="container">
-      <img
-        src="https://i.postimg.cc/wT0T4ty0/image001.jpg"
-        alt="COM7 Banner"
-        class="img-fluid"
-      />
-
       <div class="content-container">
         <h1 style="color: #0ea60e">COM7 ยืนยันสัมภาษณ์งาน ${eventName}</h1>
         <p>
@@ -127,12 +121,6 @@ export function confirmInterviewLinkTemplate({ eventName, date, interviewLink })
             <span style="color: #000">Tel: 02-017-7777 #7209 / 096-821-3057</span>
           </p>
         </div>
-
-        <img
-        src="https://i.postimg.cc/HnW1b2tt/sanea-khxng-image005.png"
-        alt="COM7 Footer"
-        style="width: 50%; height: auto; display: block"
-      />
       </div>
     </div>
   </body>
